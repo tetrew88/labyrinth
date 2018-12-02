@@ -12,6 +12,7 @@ class Labyrinth:
         self.world = Labyrinth.__world_load(self, name_level)#list 2D
         self.start_position = Labyrinth.__collecte_start_position(self, name_level)#Position()
         self.goal_position = Labyrinth.__collecte_goal_position(self, name_level)#Position()
+        Labyrinth.__place_wall(self, name_level)
 
 
     def __world_load(self, name_level):
@@ -82,6 +83,19 @@ class Labyrinth:
 
         return data["goal_position"]
 
+    
+    def __place_wall(self, name_level):
+        list_wall_position = []
+        x = 0
+        
+        while x < self.WIDTH:
+            y = 0
+            while y < self.LENGHT:
+                if self.world[x][y] == "w":
+                    self.world[x][y] = Wall()
+                y+=1
+            x+=1
+
 
 class Position:
     def __init__(self, x, y):
@@ -95,6 +109,26 @@ class Personnage:
         self.alive = True
         self.position = position
         self.inventory = []
+    
+    def move_personnage(self, direction, labyrinth):
+        if direction == "left":
+            if (self.position.y_position - 1) > -1:
+                if isinstance(labyrinth.world[self.position.x_position][(self.position.y_position - 1)],  MUR) == False:
+                    self.position.y_position -= 1
+
+        elif direction == "right":
+            if (self.position.y_position + 1) < labyrinth.LENGHT:
+                if isinstance(labyrinth.world[self.position.x_position][(self.position.y_position +1)], MUR) == False:
+                    self.position.y_position += 1
+
+        elif direction == "down":
+            if(self.position.x_position + 1 ) < labyrinth.WIDTH:
+                if isinstance(labyrinth.world[(self.position.x_position +1)][self.position.y_position] ,MUR) == False:
+                    self.position.x_position += 1
+        elif direction == "up":
+            if (self.position.x_position - 1) > -1:
+                if isinstance(labyrinthe.world[(self.position.x_position - 1)][self.position.y_position] ,Mur) == False:
+                    self.position.x_position -= 1
 
 
     def pick_up_object(self, obj):
@@ -106,6 +140,16 @@ class Personnage:
         pass
         
 
+    def attack_arme(self, cible, weapond):
+        print("{} attack {} with:\n {} et inflige {}  degats".format(self.name, cible.name, weapond.name, weapond.damage))
+        cible.receive_damage(weapond.damage)
+
+    def receive_damage(self, damage):
+        self.life = self.life - damage
+        if self.life < 1:
+            self.alive = False
+
+
 class Object:
     def __init__(self, name, position, state):
         self.name = name
@@ -114,15 +158,13 @@ class Object:
 
 
 class Weapond:
-    def __init__(self, nom, damage):
-        self.nom = nom
+    def __init__(self, nom, damage, effect):
+        self.nom = name
         self.damage = damage
-
+        self.effect = effect
 
 class Wall:
-    def __init__(self, position):
-        position = position
-        traversable = False
+    pass
 
 
 if __name__ == "__main__":
