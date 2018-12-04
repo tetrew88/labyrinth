@@ -10,19 +10,22 @@ class Labyrinth:
 
     def __init__(self, name_level):
         self.world = Labyrinth.__world_load(self, name_level)#list 2D
-        self.start_position = Labyrinth.__collecte_start_position(self, name_level)#Position()
-        self.goal_position = Labyrinth.__collecte_goal_position(self, name_level)#Position()
-        Labyrinth.__place_wall(self, name_level)
+        self.start_position = Labyrinth.__collecte_start_position(self)#Position
+        self.goal_position = Labyrinth.__collecte_goal_position(self)#Position
+        Labyrinth.__place_wall(self)
 
 
     def __world_load(self, name_level):
         file_path = "levels/"
-        
-        try:
-            os.mkdir(file_path)
-        
-            file_path = file_path + name_level + "/"
+        base_world = []
 
+        try:    
+            os.mkdir(file_path)
+        except FileExistsError:
+                pass
+        file_path = file_path + name_level + "/"
+
+        try:
             os.mkdir(file_path)
         except FileExistsError:
             pass
@@ -31,66 +34,51 @@ class Labyrinth:
 
         try:
             with(open(file_path, "r")) as f:
-                return json.load(f)
-
+                for ligne in f:
+                    ligne_niveau = []
+                    for letters in ligne:
+                        if letters != "\n":
+                            ligne_niveau.append(letters)
+                    base_world.append(ligne_niveau)
         except IOError:
-            base_world = [[0] * self.LENGHT for i in range(15)]
+            base_world = ["0" * self.LENGHT for i in range(self.WIDTH)]
 
             with(open(file_path, "w")) as f:
-                    json.dump(base_world, f)
-            
-            return base_world
+                for ligne in base_world:
+                    f.write(str(ligne) + "\n")
+                   #json.dump(ligne, f)
+            return False
+
+        return base_world
     
 
-    def __collecte_start_position(self, name_level):
-        data = {}
-        file_path = "levels/" + name_level + "/" + "config.txt"
-        
-        try:
-            with(open(file_path, "r")) as f:
-                data = json.load(f)
-                data["start_position"] = Position(data["start_position"][0], data["start_position"][1])
-        except IOError:
-            data["start_position"] = [0, 0]
-            
-            with(open(file_path, "w")) as f:
-                json.dump(data, f)
-            
-            data["start_position"] = Position(0, 0)
-
-        return data["start_position"]
+    def __collecte_start_position(self):
+        x=0
+        while x < self.WIDTH:
+            y=0
+            while y < self.LENGHT:
+                if self.world[x][y] == "s":
+                    return Position(x, y)
+                y += 1
+            x += 1
 
     
-    def __collecte_goal_position(self, name_level):
-        data = {}
-        
-        file_path = "levels/" + name_level + "/" + "config.txt"
+    def __collecte_goal_position(self):
+        x=0
+        while x < self.WIDTH:
+            y=0
+            while y < self.LENGHT:
+                if self.world[x][y] == "g":
+                    return Position(x, y)
+                y += 1
+            x += 1
 
-        try:
-            with(open(file_path, "r")) as f:
-                data = json.load(f)
-                if "goal_position" in data:
-                    data["goal_position"] = Position(data["goal_position"][0], data["goal_position"][1])
-                else:
-                    raise IOError
-        except IOError:
-            data["goal_position"] = [15, 15]
 
-            with(open(file_path, "w")) as f:
-                json.dump(data, f)
-
-            data["goal_position"] = Position(15, 15)
-
-        return data["goal_position"]
-
-    
-    def __place_wall(self, name_level):
-        list_wall_position = []
+    def __place_wall(self):
         x = 0
-        
         while x < self.WIDTH:
             y = 0
-            while y < self.LENGHT:
+            while y < self.LENGHT :
                 if self.world[x][y] == "w":
                     self.world[x][y] = Wall()
                 y+=1
@@ -168,5 +156,5 @@ class Wall:
 
 
 if __name__ == "__main__":
-    test = Labyrinth("level1")
+    test = Labyrinth("level")
     print(test.goal_position.x_position)
