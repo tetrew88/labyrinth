@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 
 import json
 import os
@@ -7,13 +7,12 @@ class Labyrinth:
     LENGHT = 15
     WIDTH = 15
 
-
     def __init__(self, name_level):
         self.world = Labyrinth.__world_load(self, name_level)#list 2D
         self.start_position = Labyrinth.__collecte_start_position(self)#Position
         self.goal_position = Labyrinth.__collecte_goal_position(self)#Position
         Labyrinth.__place_wall(self)
-
+        #self.sprite_floor
 
     def __world_load(self, name_level):
         file_path = "levels/"
@@ -46,7 +45,6 @@ class Labyrinth:
             with(open(file_path, "w")) as f:
                 for ligne in base_world:
                     f.write(str(ligne) + "\n")
-                   #json.dump(ligne, f)
             return False
 
         return base_world
@@ -75,14 +73,14 @@ class Labyrinth:
 
 
     def __place_wall(self):
-        x = 0
+        x=0
         while x < self.WIDTH:
-            y = 0
-            while y < self.LENGHT :
-                if self.world[x][y] == "w":
+            y=0
+            while y < self.LENGHT:
+                if self.world[x][y] == "m":
                     self.world[x][y] = Wall()
-                y+=1
-            x+=1
+                y +=1
+            x +=1
 
 
 class Position:
@@ -97,6 +95,7 @@ class Personnage:
         self.alive = True
         self.position = position
         self.inventory = []
+        self.sprite = ("package/ressource/" + name + ".png")
     
     def move_personnage(self, direction, labyrinth):
         if direction == "left":
@@ -152,8 +151,10 @@ class Weapond:
         self.effect = effect
 
 class Wall:
-    pass
-
+    
+    def __init__():
+    #self.sprite = 
+        pass
 
 if __name__ == "__main__":
     test = Labyrinth("level")
