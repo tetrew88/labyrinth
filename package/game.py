@@ -4,11 +4,8 @@ from pygame.locals import *
 from package.classe import *
 
 def Game(screen):
-    width_tile = 43
-    lenght_tile = 32
-
-    width_window = int(lenght_tile * Labyrinth.WIDTH + 200)
-    lenght_window = int(width_tile * Labyrinth.LENGHT)
+    width_window = int(Labyrinth.WIDTH_TILE * Labyrinth.WIDTH)
+    lenght_window = int(Labyrinth.LENGHT_TILE * Labyrinth.LENGHT)
 
     labyrinth = Labyrinth("level")
 
@@ -16,21 +13,23 @@ def Game(screen):
     gardien = Personnage("Gardien", 15, labyrinth.goal_position)
 
     screen = pygame.display.set_mode((width_window, lenght_window))
-    
+
     play = 1
     while play:
         x = 0
         while x < labyrinth.WIDTH:
             y = 0
             while y < labyrinth.LENGHT:
-                if Position(x, y) == mac_gyver.position:
-                    screen.blit(mac_gyver.sprite, mac_gyver.position)
-                elif Position(x, y) == gardien.position:
-                    screen.blit(gardien.sprite, gardien.position)
+                if x == mac_gyver.position.x and y == mac_gyver.position.x:
+                    screen.blit(mac_gyver.sprite, (x*labyrinth.WIDTH_TILE, y*labyrinth.LENGHT_TILE))
+                elif x == gardien.position.x and y == gardien.position.y:
+                    screen.blit(gardien.sprite, (x*labyrinth.WIDTH_TILE, y*labyrinth.LENGHT_TILE))
                 elif isinstance(labyrinth.world[x][y], Wall):
                     pass
                 else:
                     pass
+                y += 1
+            x += 1
 
         pygame.display.flip()
 

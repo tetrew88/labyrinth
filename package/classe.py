@@ -1,11 +1,16 @@
 #!/usr/bin/python3
 
+import pygame
+from pygame.locals import *
 import json
 import os
 
 class Labyrinth:
     LENGHT = 15
     WIDTH = 15
+
+    LENGHT_TILE = 32
+    WIDTH_TILE = 36
 
     def __init__(self, name_level):
         self.world = Labyrinth.__world_load(self, name_level)#list 2D
@@ -22,12 +27,6 @@ class Labyrinth:
             os.mkdir(file_path)
         except FileExistsError:
                 pass
-        file_path = file_path + name_level + "/"
-
-        try:
-            os.mkdir(file_path)
-        except FileExistsError:
-            pass
         
         file_path = file_path + name_level + ".lvl"
 
@@ -39,6 +38,7 @@ class Labyrinth:
                         if letters != "\n":
                             ligne_niveau.append(letters)
                     base_world.append(ligne_niveau)
+        
         except IOError:
             base_world = ["0" * self.LENGHT for i in range(self.WIDTH)]
 
@@ -51,25 +51,31 @@ class Labyrinth:
     
 
     def __collecte_start_position(self):
+        start = Position(0, 0)
         x=0
         while x < self.WIDTH:
             y=0
             while y < self.LENGHT:
                 if self.world[x][y] == "s":
-                    return Position(x, y)
+                    start = Position(x, y)
                 y += 1
             x += 1
 
+        return start
+
     
     def __collecte_goal_position(self):
+        goal = Position(0, 0)
         x=0
         while x < self.WIDTH:
             y=0
             while y < self.LENGHT:
                 if self.world[x][y] == "g":
-                    return Position(x, y)
+                    goal = Position(x, y)
                 y += 1
             x += 1
+
+        return goal
 
 
     def __place_wall(self):
@@ -77,16 +83,18 @@ class Labyrinth:
         while x < self.WIDTH:
             y=0
             while y < self.LENGHT:
-                if self.world[x][y] == "m":
+                if self.world[x][y] == "w":
                     self.world[x][y] = Wall()
                 y +=1
             x +=1
 
+    def display_map(self):
+        pass    
 
 class Position:
     def __init__(self, x, y):
-        self.x_position = x
-        self.y_position = y
+        self.x = x
+        self.y = y
 
 
 class Personnage:
@@ -95,8 +103,8 @@ class Personnage:
         self.alive = True
         self.position = position
         self.inventory = []
-        self.sprite = ("package/ressource/" + name + ".png")
-    
+        self.sprite = pygame.image.load("package/ressource/" + self.name + ".png").convert_alpha()
+        self.life = life
     def move_personnage(self, direction, labyrinth):
         if direction == "left":
             if (self.position.y_position - 1) > -1:
