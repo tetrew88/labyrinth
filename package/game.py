@@ -12,8 +12,9 @@ def Game(screen):
     mac_gyver = Personnage("MacGyver", 15, labyrinth.start_position)
     gardien = Personnage("Gardien", 15, labyrinth.goal_position)
 
-    floor = Floor(False)
-    #wall = Wall()
+    floor = Floor()
+    wall = Wall()
+
     screen = pygame.display.set_mode((width_window, lenght_window))
 
     labyrinth.world[gardien.position.x][gardien.position.y] = "g"
@@ -32,6 +33,9 @@ def Game(screen):
                     screen.blit(mac_gyver.sprite, (y*labyrinth.WIDTH_TILE, x*labyrinth.LENGHT_TILE))
                 elif labyrinth.world[x][y] == "g":
                     screen.blit(gardien.sprite, (y*labyrinth.WIDTH_TILE, x*labyrinth.LENGHT_TILE))
+                elif labyrinth.world[x][y] == "w":
+                    screen.blit(wall.sprite, (y*labyrinth.WIDTH_TILE, x*labyrinth.LENGHT_TILE))
+                
                 y+=1
             x+=1
 

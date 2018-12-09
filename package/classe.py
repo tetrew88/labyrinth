@@ -149,8 +149,8 @@ class Wall:
 class Floor:
     def __init__(self, trap):
         self.trap = trap
-        self.sprite = pygame.image.load("package/ressource/floor.png").convert_alpha()
-
+        self.tileset = pygame.image.load("package/ressource/floor-tiles-20x20.png").convert_alpha()
+        self.sprite = pygame.transform.scale(self.tileset.subsurface(0,0,20,20), (36, 36))
 
 
 if __name__ == "__main__":
