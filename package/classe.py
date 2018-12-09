@@ -5,6 +5,7 @@ from pygame.locals import *
 import json
 import os
 
+
 class Labyrinth:
     LENGHT = 15
     WIDTH = 15
@@ -16,8 +17,6 @@ class Labyrinth:
         self.world = Labyrinth.__world_load(self, name_level)#list 2D
         self.start_position = Labyrinth.__collecte_start_position(self)#Position
         self.goal_position = Labyrinth.__collecte_goal_position(self)#Position
-        Labyrinth.__place_wall(self)
-        #self.sprite_floor
 
     def __world_load(self, name_level):
         file_path = "levels/"
@@ -46,7 +45,6 @@ class Labyrinth:
                 for ligne in base_world:
                     f.write(str(ligne) + "\n")
             return False
-
         return base_world
     
 
@@ -60,7 +58,6 @@ class Labyrinth:
                     start = Position(x, y)
                 y += 1
             x += 1
-
         return start
 
     
@@ -74,22 +71,8 @@ class Labyrinth:
                     goal = Position(x, y)
                 y += 1
             x += 1
-
         return goal
 
-
-    def __place_wall(self):
-        x=0
-        while x < self.WIDTH:
-            y=0
-            while y < self.LENGHT:
-                if self.world[x][y] == "w":
-                    self.world[x][y] = Wall()
-                y +=1
-            x +=1
-
-    def display_map(self):
-        pass    
 
 class Position:
     def __init__(self, x, y):
@@ -105,37 +88,35 @@ class Personnage:
         self.inventory = []
         self.sprite = pygame.image.load("package/ressource/" + self.name + ".png").convert_alpha()
         self.life = life
-    def move_personnage(self, direction, labyrinth):
-        if direction == "left":
-            if (self.position.y_position - 1) > -1:
-                if isinstance(labyrinth.world[self.position.x_position][(self.position.y_position - 1)],  MUR) == False:
-                    self.position.y_position -= 1
-
-        elif direction == "right":
-            if (self.position.y_position + 1) < labyrinth.LENGHT:
-                if isinstance(labyrinth.world[self.position.x_position][(self.position.y_position +1)], MUR) == False:
-                    self.position.y_position += 1
-
-        elif direction == "down":
-            if(self.position.x_position + 1 ) < labyrinth.WIDTH:
-                if isinstance(labyrinth.world[(self.position.x_position +1)][self.position.y_position] ,MUR) == False:
-                    self.position.x_position += 1
+     
+    def move_personnage(self, direction, world):
+        if direction == "right":
+            if self.position.y < Labyrinth.LENGHT:
+                if world[self.position.x][(self.position.y + 1)] != "w":
+                   self.position = Position(self.position.x, (self.position.y +1))
+        elif direction == "left":
+            if self.position.y > -1:
+                if world[self.position.x][self.position.y - 1] != "w":
+                    self.position = Position(self.position.x, (self.position.y - 1))
         elif direction == "up":
-            if (self.position.x_position - 1) > -1:
-                if isinstance(labyrinthe.world[(self.position.x_position - 1)][self.position.y_position] ,Mur) == False:
-                    self.position.x_position -= 1
-
+            if self.position.x > -1:
+                if world[self.position.x - 1][self.position.y] != "w":
+                    self.position = Position((self.position.x - 1), self.position.y)
+        elif direction == "down":
+            if self.position.x < Labyrinth.WIDTH:
+                if world[self.position.x + 1][self.position.y] != "w":
+                    self.position = Position((self.position.x + 1), self.position.y)
+        
+        return self.position
 
     def pick_up_object(self, obj):
         self.inventory.append(obj)
         obj.state = False
 
-
     def craft_weapond(self, name, ingredients):
-        pass
-        
+        pass        
 
-    def attack_arme(self, cible, weapond):
+    def attack_weapond(self, cible, weapond):
         print("{} attack {} with:\n {} et inflige {}  degats".format(self.name, cible.name, weapond.name, weapond.damage))
         cible.receive_damage(weapond.damage)
 
@@ -158,12 +139,19 @@ class Weapond:
         self.damage = damage
         self.effect = effect
 
+
 class Wall:
-    
-    def __init__():
-    #self.sprite = 
-        pass
+    def __init__(self, trap):
+        self.trap = trap
+        #self.sprite =
+
+
+class Floor:
+    def __init__(self, trap):
+        self.trap = trap
+        self.sprite = pygame.image.load("package/ressource/floor.png").convert_alpha()
+
+
 
 if __name__ == "__main__":
     test = Labyrinth("level")
-    print(test.goal_position.x_position)
