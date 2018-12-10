@@ -2,9 +2,10 @@
 
 import pygame
 from pygame.locals import *
+
 import json
 import os
-
+import random
 
 class Labyrinth:
     LENGHT = 15
@@ -111,7 +112,6 @@ class Personnage:
 
     def pick_up_object(self, obj):
         self.inventory.append(obj)
-        obj.state = False
 
     def craft_weapond(self, name, ingredients):
         pass        
@@ -127,10 +127,27 @@ class Personnage:
 
 
 class Object:
-    def __init__(self, name, position, state):
+    def __init__(self, name, state, world):
         self.name = name
-        self.position = position
+        self.position = Object.__obtain_position(self, world)
         self.state = state
+        self.sprite = (pygame.transform.scale(pygame.image.load("package/ressource/" + name +".png").convert_alpha(), (36, 36)))
+        self.position_blit = Position(self.position.y*Labyrinth.WIDTH_TILE, self.position.x*Labyrinth.LENGHT_TILE)
+
+    def __obtain_position(self, world):
+        position_ok = False
+
+        while position_ok == False:
+            aleatory_x = random.randint(0, Labyrinth.WIDTH - 1)
+            aleatory_y = random.randint(0, Labyrinth.LENGHT - 1)
+
+            if world[aleatory_x][aleatory_y] == "0":
+                break
+
+        return Position(aleatory_x, aleatory_y)
+
+    def display_object(self, screen):
+        screen.blit(self.sprite, (self.position_blit.x, self.position_blit.y))
 
 
 class Weapond:
@@ -141,16 +158,14 @@ class Weapond:
 
 
 class Wall:
-    def __init__(self, trap):
-        self.trap = trap
-        #self.sprite =
-
+    def __init__(self):
+        self.tileset = pygame.image.load("package/ressource/structures.png").convert_alpha()
+        self.sprite = pygame.transform.scale(self.tileset.subsurface(1*20, 1*20 ,20,20), (36,36))
 
 class Floor:
-    def __init__(self, trap):
-        self.trap = trap
+    def __init__(self):
         self.tileset = pygame.image.load("package/ressource/floor-tiles-20x20.png").convert_alpha()
-        self.sprite = pygame.transform.scale(self.tileset.subsurface(0,0,20,20), (36, 36))
+        self.sprite = pygame.transform.scale(self.tileset.subsurface(3*20, 0*20,20,20), (36, 36))
 
 
 if __name__ == "__main__":

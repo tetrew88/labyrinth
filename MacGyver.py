@@ -10,12 +10,17 @@ from package import fonctions
 pygame.init()
 
 def main():
-    screen = pygame.display.set_mode((500, 400))
+    main_menu = 1
+
+    while main_menu:
+
+        screen = pygame.display.set_mode((500, 400))
 
 
-    if fonctions.menu_principale(screen) != False:
-        if game.Game(screen) != False:
-            pass
+        if fonctions.menu_principale(screen) != False:
+            game.Game(screen)
 
+        else:
+            break
 if __name__ == "__main__":
     main()
