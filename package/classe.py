@@ -112,19 +112,24 @@ class Personnage:
 
     def pick_up_object(self, obj):
         self.inventory.append(obj)
+        obj.state = False
 
-    def craft_weapond(self, name, ingredients):
-        pass        
+    def craft_object(self, list_ingredients):
+        pass
+        #for item in list_ingredients:
+            #self.inventory.remove(item)
 
-    def attack_weapond(self, cible, weapond):
-        print("{} attack {} with:\n {} et inflige {}  degats".format(self.name, cible.name, weapond.name, weapond.damage))
-        cible.receive_damage(weapond.damage)
+        #seringue = Object("seringue", False, world)
+        #self.inventory
 
-    def receive_damage(self, damage):
-        self.life = self.life - damage
-        if self.life < 1:
-            self.alive = False
+    def display_personnage(self, screen):
+        screen.blit(self.sprite, (self.position.y*Labyrinth.WIDTH_TILE, self.position.x*Labyrinth.LENGHT_TILE))
 
+    def display_inventory(self, screen):
+        x = 0
+        for item in self.inventory:
+            screen.blit(pygame.transform.scale(item.sprite, (20,20)), (x*20, 0))
+            x += 1
 
 class Object:
     def __init__(self, name, state, world):
@@ -149,24 +154,22 @@ class Object:
     def display_object(self, screen):
         screen.blit(self.sprite, (self.position_blit.x, self.position_blit.y))
 
-
-class Weapond:
-    def __init__(self, nom, damage, effect):
-        self.nom = name
-        self.damage = damage
-        self.effect = effect
-
-
 class Wall:
     def __init__(self):
         self.tileset = pygame.image.load("package/ressource/structures.png").convert_alpha()
         self.sprite = pygame.transform.scale(self.tileset.subsurface(1*20, 1*20 ,20,20), (36,36))
+
+    def display_wall(self, screen, x,y):
+        screen.blit(self.sprite, (y*Labyrinth.WIDTH_TILE, x*Labyrinth.LENGHT_TILE))
+
 
 class Floor:
     def __init__(self):
         self.tileset = pygame.image.load("package/ressource/floor-tiles-20x20.png").convert_alpha()
         self.sprite = pygame.transform.scale(self.tileset.subsurface(3*20, 0*20,20,20), (36, 36))
 
+    def display_floor(self, screen, x,y):
+        screen.blit(self.sprite, (y*Labyrinth.WIDTH_TILE, x*Labyrinth.LENGHT_TILE))
 
 if __name__ == "__main__":
     test = Labyrinth("level")

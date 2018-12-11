@@ -37,14 +37,14 @@ def Game(screen):
             y = 0
             while y < labyrinth.LENGHT:
                 if labyrinth.world[x][y] == "0":
-                    screen.blit(floor.sprite, (y * labyrinth.WIDTH_TILE, x * labyrinth.LENGHT_TILE))
+                    floor.display_floor(screen ,x,y)
                 elif labyrinth.world[x][y] == "m":
-                    screen.blit(mac_gyver.sprite, (y * labyrinth.WIDTH_TILE, x * labyrinth.LENGHT_TILE))
+                    mac_gyver.display_personnage(screen)
                 elif labyrinth.world[x][y] == "g":
-                    screen.blit(gardien.sprite, (y * labyrinth.WIDTH_TILE, x * labyrinth.LENGHT_TILE))
+                    gardien.display_personnage(screen)
                 elif labyrinth.world[x][y] == "w":
-                    screen.blit(wall.sprite, (y * labyrinth.WIDTH_TILE, x * labyrinth.LENGHT_TILE))
-               
+                    wall.display_wall(screen, x,y)
+
                 y+=1
             x+=1
 
@@ -52,11 +52,20 @@ def Game(screen):
             if item.state == True:
                 item.display_object(screen)
 
+        for item in list_object:
+            if item.state == True:
+                if mac_gyver.position.x == item.position.x and mac_gyver.position.y == item.position.y:
+                    mac_gyver.pick_up_object(item)
+                    labyrinth.world[item.position.x][item.position.y] = "0"
+
+        mac_gyver.display_inventory(screen)
+
         pygame.display.flip()
 
         if mac_gyver.position.x == gardien.position.x and mac_gyver.position.y == gardien.position.y:
             print("perdu")
             play = 0
+
 
 
         labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] = "0"
@@ -73,9 +82,3 @@ def Game(screen):
                     mac_gyver.position = mac_gyver.move_personnage("right", labyrinth.world)
                 elif event.key == K_DOWN:
                     mac_gyver.position = mac_gyver.move_personnage("down", labyrinth.world)
-
-        for item in list_object:
-            if mac_gyver.position.x == item.position.x and mac_gyver.position.y == item.position.y:
-                mac_gyver.pick_up_object(item)
-                labyrinth.world[item.position.x][item.position.y] = "0"
-                item.state= False
