@@ -12,10 +12,12 @@ pygame.init()
 def main():
     main_menu = 1
 
+    pygame.key.set_repeat(200, 200)
+
     while main_menu:
 
         screen = pygame.display.set_mode((500, 400))
-
+        pygame.display.set_caption("Labyrinth")
 
         if fonctions.menu_principale(screen) != False:
             game.Game(screen)
