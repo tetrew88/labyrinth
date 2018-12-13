@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
 import pygame
-from pygame.locals import *
+import game
+import fonctions
 
-from package import game
-from package.classe import *
-from package import fonctions
+from classe import *
+from pygame.locals import *
 
 pygame.init()
 

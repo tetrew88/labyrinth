@@ -1,9 +1,9 @@
 import pygame
 from pygame.locals import *
 
-from package import fonctions
+import fonctions
 
-from package.classe import *
+from classe import *
 
 def Game(screen):
     victory = False

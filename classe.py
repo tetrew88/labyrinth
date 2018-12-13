@@ -105,7 +105,7 @@ class Personnage:
         self.alive = True
         self.position = position
         self.inventory = []
-        self.sprite = pygame.image.load("package/ressource/" + self.name + ".png").convert_alpha()
+        self.sprite = pygame.image.load("ressource/" + self.name + ".png").convert_alpha()
         self.life = life
      
     def move_personnage(self, direction, world):
@@ -151,7 +151,7 @@ class Object:
         self.name = name
         self.position = Position(0,0)
         self.state = state
-        self.sprite = pygame.transform.scale(pygame.image.load("package/ressource/" + name +".png").convert_alpha(), (36, 36))
+        self.sprite = pygame.transform.scale(pygame.image.load("ressource/" + name +".png").convert_alpha(), (36, 36))
         
     @property
     def blit_position(self):
@@ -173,7 +173,7 @@ class Object:
 
 class Wall:
     def __init__(self):
-        self.tileset = pygame.image.load("package/ressource/structures.png").convert_alpha()
+        self.tileset = pygame.image.load("ressource/structures.png").convert_alpha()
         self.sprite = pygame.transform.scale(self.tileset.subsurface(1*20, 1*20 ,20,20), (36,36))
 
     def display_wall(self, screen, x,y):
@@ -182,7 +182,7 @@ class Wall:
 
 class Floor:
     def __init__(self):
-        self.tileset = pygame.image.load("package/ressource/floor-tiles-20x20.png").convert_alpha()
+        self.tileset = pygame.image.load("ressource/floor-tiles-20x20.png").convert_alpha()
         self.sprite = pygame.transform.scale(self.tileset.subsurface(3*20, 0*20,20,20), (36, 36))
 
     def display_floor(self, screen, x,y):

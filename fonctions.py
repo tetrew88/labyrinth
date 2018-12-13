@@ -3,12 +3,12 @@
 import pygame
 from pygame.locals import *
 
-from package.classe import *
+from classe import *
 
 def menu_principale(screen):
     play = 1
     
-    background = pygame.image.load("package/ressource/Menu.png").convert()
+    background = pygame.image.load("ressource/Menu.png").convert()
     screen.blit(background, (0, 0))
 
     pygame.display.flip()
@@ -66,9 +66,9 @@ def end_game(screen, mac_gyver):
     victory = verify_victory(mac_gyver.inventory)
 
     if victory == True:
-        background = pygame.image.load("package/ressource/win.png").convert()
+        background = pygame.image.load("ressource/win.png").convert()
     else:
-        background = pygame.image.load("package/ressource/lose.png").convert()
+        background = pygame.image.load("ressource/lose.png").convert()
 
     background = pygame.transform.scale(background , (500, 400))
 
