@@ -69,6 +69,5 @@ def Game(screen):
                     mac_gyver.move_personnage("down", labyrinth.world)
 
         if labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] == "g":
+            fonctions.end_game(screen, mac_gyver)
             play = False
-    
-    fonctions.end_game(screen, mac_gyver)
