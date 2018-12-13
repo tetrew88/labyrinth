@@ -74,6 +74,24 @@ class Labyrinth:
             x += 1
         return goal
 
+    def display_world(self, mac_gyver, gardien, wall, floor, screen):
+        x = 0
+        while x < self.WIDTH:
+            y = 0
+            while y < self.LENGHT:
+                if self.world[x][y] == "0":
+                    floor.display_floor(screen ,x,y)
+                elif self.world[x][y] == "m":
+                    mac_gyver.display_personnage(screen)
+                elif self.world[x][y] == "g":
+                    gardien.display_personnage(screen)
+                elif self.world[x][y] == "w":
+                    wall.display_wall(screen, x,y)
+                elif self.world[x][y] == 'o':
+                    floor.display_floor(screen, x,y)
+                y+=1
+            x+=1
+
 
 class Position:
     def __init__(self, x, y):
@@ -107,20 +125,17 @@ class Personnage:
             if self.position.x < Labyrinth.WIDTH:
                 if world[self.position.x + 1][self.position.y] != "w":
                     self.position = Position((self.position.x + 1), self.position.y)
-        
-        return self.position
 
     def pick_up_object(self, obj):
         self.inventory.append(obj)
         obj.state = False
 
     def craft_object(self, list_ingredients):
-        pass
-        #for item in list_ingredients:
-            #self.inventory.remove(item)
+        for item in list_ingredients:
+            self.inventory.remove(item)
 
-        #seringue = Object("seringue", False, world)
-        #self.inventory
+        seringue = Object("seringue", False)
+        self.inventory.append(seringue)
 
     def display_personnage(self, screen):
         screen.blit(self.sprite, (self.position.y*Labyrinth.WIDTH_TILE, self.position.x*Labyrinth.LENGHT_TILE))
@@ -128,31 +143,33 @@ class Personnage:
     def display_inventory(self, screen):
         x = 0
         for item in self.inventory:
-            screen.blit(pygame.transform.scale(item.sprite, (20,20)), (x*20, 0))
-            x += 1
+            screen.blit(pygame.transform.scale(item.sprite, (30,30)), (x*20, 0))
+            x += 2
 
 class Object:
-    def __init__(self, name, state, world):
+    def __init__(self, name, state):
         self.name = name
-        self.position = Object.__obtain_position(self, world)
+        self.position = Position(0,0)
         self.state = state
-        self.sprite = (pygame.transform.scale(pygame.image.load("package/ressource/" + name +".png").convert_alpha(), (36, 36)))
-        self.position_blit = Position(self.position.y*Labyrinth.WIDTH_TILE, self.position.x*Labyrinth.LENGHT_TILE)
+        self.sprite = pygame.transform.scale(pygame.image.load("package/ressource/" + name +".png").convert_alpha(), (36, 36))
+        
+    @property
+    def blit_position(self):
+        return Position(self.position.y*Labyrinth.WIDTH_TILE, self.position.x*Labyrinth.LENGHT_TILE)
 
-    def __obtain_position(self, world):
+    def obtain_aleatory_position(self, world):
         position_ok = False
 
         while position_ok == False:
-            aleatory_x = random.randint(0, Labyrinth.WIDTH - 1)
-            aleatory_y = random.randint(0, Labyrinth.LENGHT - 1)
+            self.position.x = random.randint(0, Labyrinth.WIDTH - 1)
+            self.position.y = random.randint(0, Labyrinth.LENGHT - 1)
 
-            if world[aleatory_x][aleatory_y] == "0":
+            if world[self.position.x][self.position.y] == "0":
                 break
 
-        return Position(aleatory_x, aleatory_y)
-
     def display_object(self, screen):
-        screen.blit(self.sprite, (self.position_blit.x, self.position_blit.y))
+        if self.state == True:
+            screen.blit(self.sprite, (self.blit_position.x, self.blit_position.y))
 
 class Wall:
     def __init__(self):

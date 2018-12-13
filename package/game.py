@@ -1,9 +1,12 @@
 import pygame
 from pygame.locals import *
 
+from package import fonctions
+
 from package.classe import *
 
 def Game(screen):
+    victory = False
     width_window = int(Labyrinth.WIDTH_TILE * Labyrinth.WIDTH)
     lenght_window = int(Labyrinth.LENGHT_TILE * Labyrinth.LENGHT)
     
@@ -19,12 +22,13 @@ def Game(screen):
     labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] = "m"
     labyrinth.world[gardien.position.x][gardien.position.y] = "g"
 
-    x=0
+    list_object = fonctions.create_object_from_list(list_object)
+
     for item in list_object:
-        list_object[x] = Object(item, True, labyrinth.world)
-        if list_object[x].state == True:
-            labyrinth.world[list_object[x].position.x][list_object[x].position.y] = "o"
-        x+=1
+        item.obtain_aleatory_position(labyrinth.world)
+        if item.state == True:
+            labyrinth.world[item.position.x][item.position.y] = "o"
+
 
     screen = pygame.display.set_mode((width_window, lenght_window))
 
@@ -32,41 +36,22 @@ def Game(screen):
     while play:
         labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] = "m"
 
-        x = 0
-        while x < labyrinth.WIDTH:
-            y = 0
-            while y < labyrinth.LENGHT:
-                if labyrinth.world[x][y] == "0":
-                    floor.display_floor(screen ,x,y)
-                elif labyrinth.world[x][y] == "m":
-                    mac_gyver.display_personnage(screen)
-                elif labyrinth.world[x][y] == "g":
-                    gardien.display_personnage(screen)
-                elif labyrinth.world[x][y] == "w":
-                    wall.display_wall(screen, x,y)
-
-                y+=1
-            x+=1
+        labyrinth.display_world(mac_gyver, gardien, wall, floor, screen)
 
         for item in list_object:
             if item.state == True:
                 item.display_object(screen)
-
-        for item in list_object:
-            if item.state == True:
                 if mac_gyver.position.x == item.position.x and mac_gyver.position.y == item.position.y:
                     mac_gyver.pick_up_object(item)
                     labyrinth.world[item.position.x][item.position.y] = "0"
 
         mac_gyver.display_inventory(screen)
 
+        
+        if fonctions.verify_recipe(list_object, mac_gyver.inventory) == True:
+            mac_gyver.craft_object(list_object)
+
         pygame.display.flip()
-
-        if mac_gyver.position.x == gardien.position.x and mac_gyver.position.y == gardien.position.y:
-            print("perdu")
-            play = 0
-
-
 
         labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] = "0"
 
@@ -75,10 +60,15 @@ def Game(screen):
                 play = 0
             elif event.type == KEYDOWN:
                 if event.key == K_LEFT:
-                    mac_gyver.position = mac_gyver.move_personnage("left", labyrinth.world)
+                    mac_gyver.move_personnage("left", labyrinth.world)
                 elif event.key == K_UP:
-                    mac_gyver.position = mac_gyver.move_personnage("up", labyrinth.world)
+                    mac_gyver.move_personnage("up", labyrinth.world)
                 elif event.key == K_RIGHT:
-                    mac_gyver.position = mac_gyver.move_personnage("right", labyrinth.world)
+                    mac_gyver.move_personnage("right", labyrinth.world)
                 elif event.key == K_DOWN:
-                    mac_gyver.position = mac_gyver.move_personnage("down", labyrinth.world)
+                    mac_gyver.move_personnage("down", labyrinth.world)
+
+        if labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] == "g":
+            play = False
+    
+    fonctions.end_game(screen, mac_gyver)
