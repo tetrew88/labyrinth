@@ -32,8 +32,7 @@ def Game(screen):
 
     screen = pygame.display.set_mode((width_window, lenght_window))
 
-    play = 1
-    while play:
+    while labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] != "g":
         labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] = "m"
 
         labyrinth.display_world(mac_gyver, gardien, wall, floor, screen)
@@ -68,6 +67,4 @@ def Game(screen):
                 elif event.key == K_DOWN:
                     mac_gyver.move_personnage("down", labyrinth.world)
 
-        if labyrinth.world[mac_gyver.position.x][mac_gyver.position.y] == "g":
-            fonctions.end_game(screen, mac_gyver)
-            play = False
+    fonctions.end_game(screen, mac_gyver)
