@@ -1,0 +1,29 @@
+Labyrinth:
+
+	game goal:
+		1st objective: capture all item of the map.
+
+		When you have captured all item mac_gyver goes craft a seringue
+			for asleep gardien
+
+		2nd objective: asleep gardien with seringue (go to gardien position)
+
+	Keybord:
+		right arrow : right direction
+		left arrow : left direction
+		down arrow : down direction
+		up arrow : up direction
+	
+	Map Edition:
+		to come an editor of level
+
+		for edit map go to folder levels and open level.lvl in text editor and modify the file with this parameter:
+
+		s = start position
+		g = goal position
+
+		w = wall position
+
+		0 = floor position
+
+		the objects are randomly placed
