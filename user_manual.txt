@@ -26,4 +26,11 @@ Labyrinth:
 
 		0 = floor position
 
+		exemple:
+			mmmmmmmmm
+			ms0000mmm
+			m0000m00m
+			m000000gm
+			mmmmmmmmm
+
 		the objects are randomly placed

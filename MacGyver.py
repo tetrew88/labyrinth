@@ -1,28 +1,28 @@
 #!/usr/bin/python3
 
-import pygame
+import pygame#import pygame for 2d and image
+from pygame.locals import *#import constante pygame
+
+import functions
 import game
-import fonctions
 
-from classe import *
-from pygame.locals import *
-
-pygame.init()
+pygame.init()#initialize pygame
 
 def main():
-    main_menu = 1
+    main_menu = True#initialise main_menu to true
 
-    pygame.key.set_repeat(200, 200)
+    pygame.key.set_repeat(200, 200)#enabled key repeat
 
-    while main_menu:
+    screen = pygame.display.set_mode((500, 400))#initialize screen
+    pygame.display.set_caption("Labyrinth")#rename screen
 
-        screen = pygame.display.set_mode((500, 400))
-        pygame.display.set_caption("Labyrinth")
 
-        if fonctions.menu_principale(screen) != False:
-            game.Game(screen)
+    while main_menu:#main menu
 
-        else:
-            break
+        if functions.main_menu(screen) != False:#if the function main_menu() return true
+            game.game(screen)#charged game
+
+        else:#else
+            break#quit 
 if __name__ == "__main__":
     main()
