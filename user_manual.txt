@@ -1,3 +1,8 @@
+for play game:
+	in your terminal:
+		chmod +x MacGyver.py
+		./MacGyver.py
+
 Labyrinth:
 
 	game goal:

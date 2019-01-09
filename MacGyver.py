@@ -9,6 +9,7 @@ import game
 pygame.init()#initialize pygame
 
 def main():
+    """Game laucher"""
     main_menu = True#initialise main_menu to true
 
     pygame.key.set_repeat(200, 200)#enabled key repeat
@@ -16,13 +17,12 @@ def main():
     screen = pygame.display.set_mode((500, 400))#initialize screen
     pygame.display.set_caption("Labyrinth")#rename screen
 
-
-    while main_menu:#main menu
-
-        if functions.main_menu(screen) != False:#if the function main_menu() return true
+    #main loop
+    while main_menu:
+        if functions.main_menu(screen) == True:#if user wants to play
             game.game(screen)#charged game
-
         else:#else
-            break#quit 
+            break#quit
+
 if __name__ == "__main__":
     main()

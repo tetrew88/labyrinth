@@ -12,12 +12,22 @@ class Wall:
     """
     def __init__(self):
         """Constructor of class wall"""
-        self.tileset = pygame.image.load("ressource/structures.png").convert_alpha()#load tileset
-        self.sprite = pygame.transform.scale(self.tileset.subsurface(1*20, 1*20, 20, 20), (36, 36))#load tile position(position.x of tile*lengt_tile, position.y od tile *width_tile) from tileset and resize tile to size 36x36
+        
+        #load tileset
+        self.tileset = pygame.image.load("ressource/structures.png"). \
+        convert_alpha()
+
+        #selectionned sprite 1 from tileset
+        self.sprite = pygame.transform.scale(self.tileset.subsurface \
+            (1*20, 1*20, 20, 20), (36, 36))
 
 
     def display_wall(self, screen, x,y):
-        screen.blit(self.sprite, (y*labyrinth.Labyrinth.WIDTH_TILE, x*labyrinth.Labyrinth.LENGHT_TILE))#blit the wall
+        """Methode for display wall"""
+
+        #display wall
+        screen.blit(self.sprite, (y*labyrinth.Labyrinth.WIDTH_TILE, \
+        x*labyrinth.Labyrinth.LENGHT_TILE))
 
 
 def main():

@@ -12,11 +12,23 @@ class Floor:
     """
     def __init__(self):
         """constructor of class floor"""
-        self.tileset = pygame.image.load("ressource/floor-tiles-20x20.png").convert_alpha()#load tileset
-        self.sprite = pygame.transform.scale(self.tileset.subsurface(3*20, 0*20,20,20), (36, 36))##load tile position(3*lengt_tile, 0*width_tile) from tileset and resize tile to size 36x36
+        
+        #load tileset
+        self.tileset = pygame.image.load("ressource/floor-tiles-20x20.png"). \
+        convert_alpha()
+
+        #selectionned picture 3 from tileset
+        self.sprite = pygame.transform.scale(self.tileset.subsurface \
+        (3*20, 0*20,20,20), (36, 36))
 
     def display_floor(self, screen, x,y):
-        screen.blit(self.sprite, (y*labyrinth.Labyrinth.WIDTH_TILE, x*labyrinth.Labyrinth.LENGHT_TILE))#blit floor
+        """Methode for display floor"""
+
+        #display floor
+        screen.blit(self.sprite, (y*labyrinth.Labyrinth.WIDTH_TILE, \
+        x*labyrinth.Labyrinth.LENGHT_TILE))#blit floor
+
+
 def main():
     floor = Floor()
 
